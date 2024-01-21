@@ -52,7 +52,7 @@ metadata {
 }
 def setVersion(){
     appName = "ECOLinkCustomDriver"
-	version = "1.0.1" 
+	version = "1.0.2"
     dwInfo = "${appName}:${version}"
     sendEvent(name: "dwDriverInfo", value: dwInfo, displayed: true)
 }
