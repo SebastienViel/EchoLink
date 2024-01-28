@@ -116,7 +116,8 @@ def updated() {
 		cmds = [zwave.wakeUpV1.wakeUpNoMoreInformation().format()]
 	}
 	response(cmds)
-    
+	schedule("0 0 */12 * * ?", "batteryCheck")
+
 }
 
 def configure() {
@@ -130,6 +131,12 @@ def logsOff(){
     log.warn "Debug logging disabled."
     device.updateSetting("logEnable",[value:"false",type:"bool"])
 }
+
+def batteryCheck() {
+    if (logEnable) log.debug "Checking battery level..."
+    zwave.batteryV1.batteryGet()
+}
+
 
 //THIS IS WHAT DEFINES IF CLOSED OR OPEN
 def sensorValueEvent(value) {
