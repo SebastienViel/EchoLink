@@ -63,12 +63,12 @@ def updateVersion() {
 }
 
 def setClosed() {
-    log.debug "Manually setting sensor to closed"
+    if(logEnable) log.debug "Manually setting sensor to closed"
     sendEvent(name: "contact", value: "closed")
 }
 
 def setOpen() {
-    log.debug "Manually setting sensor to open"
+    if(logEnable) log.debug "Manually setting sensor to open"
     sendEvent(name: "contact", value: "open")
 }
 
@@ -241,7 +241,7 @@ def zwaveEvent(hubitat.zwave.commands.manufacturerspecificv2.ManufacturerSpecifi
 	def result = []
 
 	def msr = String.format("%04X-%04X-%04X", cmd.manufacturerId, cmd.productTypeId, cmd.productId)
-	log.debug "msr: $msr"
+	if(logEnable) log.debug "msr: $msr"
 	updateDataValue("MSR", msr)
 
 	retypeBasedOnMSR()
