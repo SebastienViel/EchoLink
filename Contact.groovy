@@ -116,7 +116,6 @@ def updated() {
 		cmds = [zwave.wakeUpV1.wakeUpNoMoreInformation().format()]
 	}
 	response(cmds)
-	schedule("0 0 */12 * * ?", "batteryCheck")
 
 }
 
@@ -131,12 +130,6 @@ def logsOff(){
     log.warn "Debug logging disabled."
     device.updateSetting("logEnable",[value:"false",type:"bool"])
 }
-
-def batteryCheck() {
-    if (logEnable) log.debug "Checking battery level..."
-    zwave.batteryV1.batteryGet()
-}
-
 
 //THIS IS WHAT DEFINES IF CLOSED OR OPEN
 def sensorValueEvent(value) {
@@ -225,11 +218,10 @@ def zwaveEvent(hubitat.zwave.commands.wakeupv1.WakeUpNotification cmd)
 }
 
 def zwaveEvent(hubitat.zwave.commands.batteryv1.BatteryReport cmd) {
-	def map = [ name: "battery", unit: "%" ]
+	def map = [ name: "battery", unit: "%", isStateChange = true ]
 	if (cmd.batteryLevel == 0xFF) {
 		map.value = 1
 		map.descriptionText = "${device.displayName} has a low battery"
-		map.isStateChange = true
 	} else {
 		map.value = cmd.batteryLevel
 	}
