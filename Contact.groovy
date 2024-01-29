@@ -1,7 +1,7 @@
 /**
  *  Ecolink Contact Sensor Custom (modified from original Z-Wave Door/Window Sensor)
  * 
- *  importUrl: "https://raw.githubusercontent.com/SebastienViel/EchoLink/main/Contact"
+ *  importUrl: "https://github.com/SebastienViel/EchoLink/tree/main"
  *
  *  Copyright 2019 Aaron Ward
  *
