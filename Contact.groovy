@@ -218,7 +218,7 @@ def zwaveEvent(hubitat.zwave.commands.wakeupv1.WakeUpNotification cmd)
 }
 
 def zwaveEvent(hubitat.zwave.commands.batteryv1.BatteryReport cmd) {
-	def map = [ name: "battery", unit: "%", isStateChange = true ]
+	def map = [ name: "battery", unit: "%", isStateChange: true ]
 	if (cmd.batteryLevel == 0xFF) {
 		map.value = 1
 		map.descriptionText = "${device.displayName} has a low battery"
