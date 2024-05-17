@@ -22,11 +22,12 @@
  *  1.0.1 - added AppWatchDogv2 support
  *  1.0.0 - initial code port and modifications
  *  1.0.2 - SV - Added manual way to set to Open or Closed and a switch to reverse the state
+ *  1.0.3 - SV - Fixed manual way to reverse the state
  */
 
 metadata {
 	definition (
-            name: "Ecolink Contact Sensor Custom", 
+            name: "Ecolink Contact Sensor Custom - Work in Progress", 
             namespace: "aaronward", 
             author: "Aaron Ward",
             importUrl: "https://raw.githubusercontent.com/SebastienViel/EchoLink/main/Contact.groovy"
@@ -36,8 +37,6 @@ metadata {
 		capability "Battery"
 		capability "Configuration"
 		attribute "dwDriverInfo", "string"
-//added the following attribute to be able to reverse the sensor
-        attribute "invertState", "enum", ["normal", "inverted"]
 		command "updateVersion"
 //added a way to manually set the button to open or closed
         command "setClosed"
@@ -46,7 +45,7 @@ metadata {
 	preferences() {    	
             input("logEnable", "bool", title: "Enable logging", required: true, defaultValue: false)
 //added the following input to be able to reverse the sensor
-            input("stateSwitch", "bool", title: "Invert State", required: true, defaultValue: false)
+            input("invertState", "bool", title: "Invert the Sensor's State", required: true, defaultValue: false)
     }    
 
 }
@@ -133,15 +132,21 @@ def logsOff(){
 
 //THIS IS WHAT DEFINES IF CLOSED OR OPEN
 def sensorValueEvent(value) {
-    def inverted = device.currentValue("invertState") == "inverted"
-    if (inverted) {
-        value==!value
+    if(logEnable) log.debug "InvertState=${invertState}"
+    if (invertState) {
+        if(logEnable) log.debug "Be aware - The switch is inverted!"        
+        if (value) {
+            createEvent(name: "contact", value: "closed")
+        } else {
+		    createEvent(name: "contact", value: "open")
+	    }
+    } else {
+        if (value) {
+            createEvent(name: "contact", value: "open")
+        } else {
+		    createEvent(name: "contact", value: "closed")
+	    }
     }
-    if (value) {
-        createEvent(name: "contact", value: "closed")
-	} else {
-		createEvent(name: "contact", value: "open")
-	}
 }
 
 
